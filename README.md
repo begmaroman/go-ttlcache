@@ -13,6 +13,10 @@ cache can be saved to and loaded from a file (using `c.Items()` to retrieve the
 items map to serialize, and `NewFrom[K, V]()` to create a cache from a deserialized
 one) to recover from downtime quickly. (See the docs for `NewFrom[K, V]()` for caveats.)
 
+### Requirements
+
+[GoLang](https://go.dev/) >=1.18
+
 ### Installation
 
 `go get github.com/begmaroman/go-ttlcache`
