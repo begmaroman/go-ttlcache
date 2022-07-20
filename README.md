@@ -1,17 +1,17 @@
 # go-ttlcache
 
-go-ttlcache is an in-memory key:value store/cache similar to memcached that is
+`go-ttlcache` is a GoLang in-memory `key` => `value` store/cache that is
 suitable for applications running on a single machine. Its major advantage is
-that, being essentially a thread-safe and generically typed `map[K]V` with expiration
+that, being essentially a thread-safe and generically typed `map[K]Item[V]` with expiration
 times, it doesn't need to serialize or transmit its contents over the network.
 
-Comparable key with any object can be stored, for a given duration or forever, 
+Comparable key with any value can be stored, for a given duration or forever, 
 and the cache can be safely used by multiple goroutines.
 
-Although go-ttlcache isn't meant to be used as a persistent datastore, the entire
+Although `go-ttlcache` isn't meant to be used as a persistent datastore, the entire
 cache can be saved to and loaded from a file (using `c.Items()` to retrieve the
-items map to serialize, and `NewFrom()` to create a cache from a deserialized
-one) to recover from downtime quickly. (See the docs for `NewFrom()` for caveats.)
+items map to serialize, and `NewFrom[K, V]()` to create a cache from a deserialized
+one) to recover from downtime quickly. (See the docs for `NewFrom[K, V]()` for caveats.)
 
 ### Installation
 
