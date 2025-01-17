@@ -109,7 +109,7 @@ func newCacheWithJanitor[K comparable, V any](de time.Duration, ci time.Duration
 	return C
 }
 
-// Add an item to the cache, replacing any existing item. If the duration is 0
+// Set an item to the cache, replacing any existing item. If the duration is 0
 // (DefaultExpiration), the cache's default expiration time is used. If it is -1
 // (NoExpiration), the item never expires.
 func (c *cache[K, V]) Set(k K, x V, d time.Duration) {
@@ -145,7 +145,7 @@ func (c *cache[K, V]) set(k K, x V, d time.Duration) {
 	}
 }
 
-// Add an item to the cache, replacing any existing item, using the default
+// SetDefault sets an item to the cache, replacing any existing item, using the default
 // expiration.
 func (c *cache[K, V]) SetDefault(k K, x V) {
 	c.Set(k, x, DefaultExpiration)
@@ -165,7 +165,7 @@ func (c *cache[K, V]) Add(k K, x V, d time.Duration) error {
 	return nil
 }
 
-// Set a new value for the cache key only if it already exists, and the existing
+// Replace sets a new value for the cache key only if it already exists, and the existing
 // item hasn't expired. Returns an error otherwise.
 func (c *cache[K, V]) Replace(k K, x V, d time.Duration) error {
 	c.mu.Lock()
@@ -292,7 +292,7 @@ func (c *cache[K, V]) DeleteExpired() {
 	}
 }
 
-// Sets an (optional) function that is called with the key and value when an
+// OnEvicted sets an (optional) function that is called with the key and value when an
 // item is evicted from the cache. (Including when it is deleted manually, but
 // not when it is overwritten.) Set to nil to disable.
 func (c *cache[K, V]) OnEvicted(f func(K, V)) {
@@ -301,7 +301,7 @@ func (c *cache[K, V]) OnEvicted(f func(K, V)) {
 	c.mu.Unlock()
 }
 
-// Write the cache's items (using Gob) to an io.Writer.
+// Save writes the cache's items (using Gob) to an io.Writer.
 //
 // NOTE: This method is deprecated in favor of c.Items() and NewFrom() (see the
 // documentation for NewFrom().)
@@ -321,7 +321,7 @@ func (c *cache[K, V]) Save(w io.Writer) (err error) {
 	return
 }
 
-// Save the cache's items to the given filename, creating the file if it
+// SaveFile saves the cache's items to the given filename, creating the file if it
 // doesn't exist, and overwriting it if it does.
 //
 // NOTE: This method is deprecated in favor of c.Items() and NewFrom() (see the
@@ -339,7 +339,7 @@ func (c *cache[K, V]) SaveFile(fname string) error {
 	return fp.Close()
 }
 
-// Add (Gob-serialized) cache items from an io.Reader, excluding any items with
+// Load adds (Gob-serialized) cache items from an io.Reader, excluding any items with
 // keys that already exist (and haven't expired) in the current cache.
 //
 // NOTE: This method is deprecated in favor of c.Items() and NewFrom() (see the
@@ -361,7 +361,7 @@ func (c *cache[K, V]) Load(r io.Reader) error {
 	return err
 }
 
-// Load and add cache items from the given filename, excluding any items with
+// LoadFile loads and add cache items from the given filename, excluding any items with
 // keys that already exist in the current cache.
 //
 // NOTE: This method is deprecated in favor of c.Items() and NewFrom() (see the
@@ -397,7 +397,7 @@ func (c *cache[K, V]) Items() map[K]Item[V] {
 	return m
 }
 
-// Returns the number of items in the cache. This may include items that have
+// ItemCount returns the number of items in the cache. This may include items that have
 // expired, but have not yet been cleaned up.
 func (c *cache[K, V]) ItemCount() int {
 	c.mu.RLock()
